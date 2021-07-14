@@ -16,13 +16,18 @@ class NumberInput():
     
     def __init__(self, value=0):
         self.__font = pygame.font.SysFont("Arial", 24)
+        
+        
+    def render(self):
         textBlock = self.__font.render(self.__strValue, True, (74, 74, 74))
         rect = textBlock.get_rect()
         rect.left = self.__position[0]
         rect.top = self.__position[1]
         rect.size = self.__size
         
-        
+        return (rect, textBlock)
+    
+    
     def value(self, val=None):
         if val == None:
             return self.__value
@@ -33,7 +38,36 @@ class NumberInput():
                 self.__strValue = vale
             except:
                 pass
+
             
+    def width(self, val=None):
+        if val == None:
+            return self.__size[0]
+        else:
+            try:
+                self.__size[0] = int(val)
+            except:
+                pass
+            
+
+    def height(self, val=None):
+        if val == None:
+            return self.__size[1]
+        else:
+            try:
+                self.__size[1] = int(val)
+            except:
+                pass
+        
+        
+    def size(self, val=None):
+        if val == None:
+            return self.__size
+        else:
+            try:
+                self.__size = [int(val[0]), int(val[1])]
+            except:
+                pass
             
     def posX(self, val=None):
         if val == None:
@@ -60,12 +94,11 @@ class NumberInput():
             return self.__position
         else:
             try:
-                w = int(val[0])
-                h = int(val[1])
                 self.__position = [int(val[0]), int(val[1])]
             except:
                 pass
-    def __str__
+
+
 
 class MainApp():
     termometro = None
@@ -79,6 +112,10 @@ class MainApp():
         
         self.termometro = Termometro()
         self.entrada = NumberInput()
+        self.entrada.pos((106, 58))
+        self.entrada.size((133, 28))
+        
+        
     def __on_close(self):
         pygame.quit()
         sys.exit()
@@ -88,7 +125,14 @@ class MainApp():
             for event in pygame.event.get():
                 if event.type == QUIT:
                     self.__on_close()
+            # Pintamos el termometro
             self.__screen.blit(self.termometro.custome, (50, 34))
+            # Pintamos el cuadro de texto
+            text = self.entrada.render()
+            # Pintamos la foto
+            pygame.draw.rect(self.__screen, (255, 255, 255),text[0])
+            self.__screen.blit(text[1], self.entrada.pos())
+            
             pygame.display.flip()
                     
                     
